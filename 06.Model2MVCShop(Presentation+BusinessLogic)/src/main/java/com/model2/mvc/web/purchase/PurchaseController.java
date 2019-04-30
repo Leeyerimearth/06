@@ -24,7 +24,7 @@ import com.model2.mvc.service.purchase.PurchaseService;
 public class PurchaseController {
 
 	@Autowired
-	@Qualifier("purchasServiceImpl")
+	@Qualifier("purchaseServiceImpl")
 	private PurchaseService purchaseService;
 	
 	@Value("#{commonProperties['pageUnit']}")
@@ -139,7 +139,7 @@ public class PurchaseController {
 	
 	@RequestMapping("/listSale.do")
 	public String listSale(@ModelAttribute("search") Search search, HttpSession session,
-								@RequestParam("menu") String menu) throws Exception
+								@RequestParam("menu") String menu,Model model) throws Exception
 	{
 		System.out.println("/listSale.do");
 		
@@ -152,6 +152,13 @@ public class PurchaseController {
 		
 		Map<String,Object> map = purchaseService.getSaleList(search);
 		session.setAttribute("menu", menu);
+		
+		Page resultPage = 
+				new Page(search.getCurrentPage(),((Integer)map.get("totalCount")).intValue(),pageUnit,pageSize);
+
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("search", search);
+		model.addAttribute("resultPage", resultPage);
 		
 		return "forward:/product/listProduct2.jsp";
 	}

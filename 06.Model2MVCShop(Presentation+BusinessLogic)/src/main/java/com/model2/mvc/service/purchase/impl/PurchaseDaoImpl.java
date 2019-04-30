@@ -58,7 +58,7 @@ public class PurchaseDaoImpl implements PurchaseDao{
 
 	@Override
 	public void insertPurchase(Purchase purchase) {
-			
+			System.out.println("paymentOption: "+purchase.getPaymentOption());
 		sqlSession.insert("PurchaseMapper.insertPurchase", purchase);
 	}
 

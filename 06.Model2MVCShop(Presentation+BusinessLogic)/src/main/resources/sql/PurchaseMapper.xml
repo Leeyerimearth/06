@@ -16,10 +16,10 @@
 		<result property="tranCode" column="tran_status_code" jdbcType="CHAR"/>
 		<result property="orderDate" column="order_data" jdbcType="DATE"/>
 		<result property="divyDate" column="dlvy_date" jdbcType="DATE"/>
-		<result property="buyer.userId"	column="buyer_id" javaType="user" />
-		<result property="purchaseProd.prodNo" column="prod_no" javaType="product"/>	
+		<result property="buyer.userId"	column="buyer_id" jdbcType="VARCHAR" />
+		<result property="purchaseProd.prodNo" column="prod_no" jdbcType="NUMERIC"/>	
 	</resultMap>
-
+	
 	<resultMap id="productSelectMap"  type="product">
 		<result property="fileName" 		column="image_file" 		jdbcType="VARCHAR"/>
 		<result property="manuDate"			column="manufacture_day" 		jdbcType="VARCHAR" />
@@ -30,6 +30,8 @@
 		<result property="regDate"			column="reg_date" 			jdbcType="DATE" />
 		<result property="quantity" 		column="quantity" 			jdbcType="NUMERIC"  />
 	</resultMap>
+	
+
 
 	<select id="findPurchase" parameterType="hashmap" resultMap="purchaseSelectMap">
 		SELECT *
@@ -83,6 +85,7 @@
 			   #{divyAddr:VARCHAR},
 			   #{divyRequest:VARCHAR},
 			   '004',
+			   SYSDATE,
 			   #{divyDate:VARCHAR},
 			   #{purchaseProd.quantity:NUMERIC})
 	</insert>

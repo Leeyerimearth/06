@@ -79,6 +79,7 @@ public class PurchaseServiceImpl  implements PurchaseService{
 	public HashMap<String, Object> getSaleList(Search search) throws Exception {
 		// TODO Auto-generated method stub
 		List<Product> allList =productDao.getProductList(search);
+		int totalCount=productDao.getTotalCount(search);
 		List<Product> joinList = purchaseDao.getSaleList(search);
 		
 		Product tempProduct = new Product();
@@ -100,6 +101,8 @@ public class PurchaseServiceImpl  implements PurchaseService{
 		}
 		
 		map.put("list",allList);
+		map.put("totalCount", totalCount);
+		//total count 넣으세용!
 		
 		return map;
 	}

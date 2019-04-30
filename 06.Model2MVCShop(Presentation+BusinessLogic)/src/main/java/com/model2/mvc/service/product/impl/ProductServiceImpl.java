@@ -27,7 +27,6 @@ public class ProductServiceImpl implements ProductService {
 	
 	public ProductServiceImpl() {
 		// TODO Auto-generated constructor stub
-		System.out.println(this.getClass()+"생성자...");
 	}
 	
 	public void setProductDao(ProductDao productDao)
@@ -56,6 +55,9 @@ public class ProductServiceImpl implements ProductService {
 	public HashMap<String, Object> getProductList2(Search search) throws Exception {
 		// TODO Auto-generated method stub
 				//productDao.getProductList2(search); -> null임
+		
+		
+		//purchaseDao.getSaleList(search);
 		return	purchaseService.getSaleList(search);
 	}
 
