@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace = "PurchaseMapper">
+
+	<resultMap id="purchaseSelectMap" type="purchase">
+		<result property="tranNo" column ="tran_no" jdbcType="NUMERIC"/>
+		<result property="paymentOption" column="payment_option" jdbcType="CHAR"/>
+		<result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+		<result property="receiverPhone" column="receiver_phone" jdbcType="VARCHAR"/>
+		<result property="divyAddr" column="demailaddr" jdbcType="VARCHAR"/>
+		<result property="divyRequest" column="dlvy_request" jdbcType="VARCHAR"/>
+		<result property="tranCode" column="tran_status_code" jdbcType="CHAR"/>
+		<result property="orderDate" column="order_data" jdbcType="DATE"/>
+		<result property="divyDate" column="dlvy_date" jdbcType="DATE"/>
+		<result property="buyer.userId"	column="buyer_id" javaType="user" />
+		<result property="purchaseProd.prodNo" column="prod_no" javaType="product"/>	
+	</resultMap>
+
+	<resultMap id="productSelectMap"  type="product">
+		<result property="fileName" 		column="image_file" 		jdbcType="VARCHAR"/>
+		<result property="manuDate"			column="manufacture_day" 		jdbcType="VARCHAR" />
+		<result property="price" 			column="price" 			jdbcType="NUMERIC" />
+		<result property="prodDetail" 		column="prod_detail" 		jdbcType="VARCHAR" />
+		<result property="prodName" 		column="prod_name" 			jdbcType="VARCHAR" />
+		<result property="prodNo" 			column="prod_no" 		jdbcType="NUMERIC" />
+		<result property="regDate"			column="reg_date" 			jdbcType="DATE" />
+		<result property="quantity" 		column="quantity" 			jdbcType="NUMERIC"  />
+	</resultMap>
+
+	<select id="findPurchase" parameterType="hashmap" resultMap="purchaseSelectMap">
+		SELECT *
+		FROM transaction
+		<if test="sqlDecideNum==1">
+			WHERE tran_no = #{identifyNumber}
+		</if>
+		<if test="sqlDecideNum==2">
+			WHERE prod_no = #{identifyNumber}
+		</if>
+	</select>
+	
+	<select id="selectUser" resultType="user">
+		SELECT * FROM user WHERE user_id = #{buyer_id}
+	</select>
+	
+	<select id="selectProduct" resultType="product">
+		SELECT * FROM product WHERE prod_no = #{prod_no}
+	</select>
+	
+	<select id="getPurchaseList" parameterType="hashmap" resultMap="purchaseSelectMap">
+		SELECT * 
+			FROM ( SELECT inner_table.* , ROWNUM AS row_seq
+				   FROM ( SELECT * FROM transaction
+				   			WHERE buyer_id= #{buyerId}
+							ORDER BY order_data )inner_table
+				   WHERE ROWNUM &lt;= #{search.endRowNum})
+		    WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	
+	</select>
+	
+	<select id="getSaleList" parameterType="search" resultMap="productSelectMap">
+		SELECT p1.prod_no, p1.prod_name, p1.prod_detail, p2.tran_status_code
+		FROM product p1, transaction p2
+		WHERE p1.prod_no = p2.prod_no
+	</select>
+	
+	<insert id="insertPurchase" parameterType="purchase">
+		INSERT INTO transaction
+		VALUES(seq_transaction_tran_no.NEXTVAL,
+			   #{purchaseProd.prodNo:NUMERIC},
+			   #{buyer.userId:VARCHAR},
+			   <if test="paymentOption==1">
+			   'ca',
+			   </if>
+			   <if test="paymentOption==0">
+			   'cd',
+			   </if>
+			   #{receiverName:VARCHAR},
+			   #{receiverPhone:VARCHAR},
+			   #{divyAddr:VARCHAR},
+			   #{divyRequest:VARCHAR},
+			   '004',
+			   #{divyDate:VARCHAR},
+			   #{purchaseProd.quantity:NUMERIC})
+	</insert>
+	
+	<update id="updatePurchase" parameterType="purchase">
+		UPDATE transaction
+	<set>
+	  <if test="paymentOption==1">
+	    payment_option = 'ca',
+	   </if>
+	  <if test="paymentOption==0">
+	    payment_option = 'cd',
+	   </if>
+	    receiver_name = #{receiverName:VARCHAR},
+	    receiver_phone = #{receiverPhone:VARCHAR},
+	    demailaddr= #{divyAddr:VARCHAR},
+	    dlvy_request = #{divyRequest:VARCHAR},
+	    dlvy_date = TO_DATE(#{divyDate},'yyyy-mm-dd')
+	</set>
+		WHERE tran_no = #{tranNo}
+	</update>
+
+
+	<update id="updateTranCode" parameterType="purchase" >
+		UPDATE transaction
+		SET 
+		<if test="tranCode=='004'">tran_status_code = '002'</if> 
+		<if test="tranCode=='002'">tran_status_code = '003'</if> 
+		WHERE tran_no = #{tranNo}
+	</update>
+	
+	<select	id="getTotalCount" parameterType ="hashmap" resultType="int">
+			SELECT COUNT(*)
+	  		FROM(	SELECT *
+					FROM transaction
+					WHERE buyer_id= #{buyerId}
+					ORDER BY order_data
+				 ) countTable		
+	
+	</select>
+
+
+</mapper>
