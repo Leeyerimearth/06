@@ -56,7 +56,9 @@
 		SELECT * 
 			FROM ( SELECT inner_table.* , ROWNUM AS row_seq
 				   FROM ( SELECT * FROM transaction
-				   			WHERE buyer_id= #{buyerId}
+				   			<if test ="buyerId != null">
+				   				WHERE buyer_id= #{buyerId}
+				   			</if>
 							ORDER BY order_data )inner_table
 				   WHERE ROWNUM &lt;= #{search.endRowNum})
 		    WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 

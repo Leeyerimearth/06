@@ -117,7 +117,11 @@ public class PurchaseController {
 		
 		System.out.println("/listPurchase.do");
 		
+		Map<String,Object> map = null;
+		
 		User user = (User) session.getAttribute("user");
+		System.out.println(user);
+		
 		
 		if(search.getCurrentPage()==0)
 		{
@@ -125,7 +129,10 @@ public class PurchaseController {
 		}
 		search.setPageSize(pageSize);
 		
-		Map<String,Object> map = purchaseService.getPurchaseList(search, user.getUserId());
+		if(user.getRole().equals("admin"))// admin이면 null 보내서, transaction table 다가져옴 //근데 admin의 구매정보는 볼수없자낭
+			map = purchaseService.getPurchaseList(search, null);
+		else
+			map = purchaseService.getPurchaseList(search, user.getUserId());
 		
 		Page resultPage = 
 				new Page(search.getCurrentPage(),((Integer)map.get("totalCount")).intValue(),pageUnit,pageSize);
@@ -134,7 +141,12 @@ public class PurchaseController {
 		model.addAttribute("search", search);
 		model.addAttribute("resultPage", resultPage);
 		
-		return "forward:/purchase/listPurchase.jsp"; 
+		//return도 다르게 해줘야함
+		
+		if(user.getRole().equals("admin"))
+			return "forward:/purchase/listPurchase.jsp";   // 수정 new jsp
+		else // 일반 유저
+			return "forward:/purchase/listUserPurchase.jsp"; 
 	}
 	
 	@RequestMapping("/listSale.do")
@@ -164,18 +176,19 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping("/updateTranCode.do")
-	public String updateTranCode(@RequestParam("prodNo") int prodNo, HttpSession session) throws Exception
+	public String updateTranCode(@RequestParam("tranNo") int tranNo, HttpSession session) throws Exception
 	{
 		System.out.println("/updateTranCode.do");
 		
-		Purchase purchase = purchaseService.getPurchase2(prodNo);
+		//Purchase purchase = purchaseService.getPurchase2(prodNo);
+		Purchase purchase = purchaseService.getPurchase(tranNo); //tranNo로 수정
 		purchaseService.updateTranCode(purchase);
 		
 		User user = (User) session.getAttribute("user");
 		
-		if(user.getUserId().equals("admin"))
-			return "forward:/listSale.do";
-		else
+		//if(user.getUserId().equals("admin")) 수정 왜냐면 user든 admin이든 listPurchase.do로 갈수있다.
+			//return "forward:/listSale.do";
+		//else
 			return "forward:/listPurchase.do";
 	}
 

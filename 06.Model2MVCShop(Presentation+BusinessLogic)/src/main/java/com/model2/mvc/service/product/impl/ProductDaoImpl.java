@@ -28,7 +28,6 @@ public class ProductDaoImpl implements ProductDao {
 	
 	public ProductDaoImpl() {
 		// TODO Auto-generated constructor stub
-		System.out.println(this.getClass()+"»ý¼ºÀÚ...");
 	}
 
 	@Override

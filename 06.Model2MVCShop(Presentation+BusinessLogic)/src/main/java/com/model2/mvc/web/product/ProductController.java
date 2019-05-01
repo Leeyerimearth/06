@@ -128,7 +128,7 @@ public class ProductController {
 		return "forward:/product/readProduct2.jsp";
 	}
 	
-	@RequestMapping("/listProduct.do")
+	@RequestMapping("/listProduct.do") //기존 listProduct trancode때문인것같은데 필요없댜
 	public String listProduct(@ModelAttribute("search") Search search,Model model,HttpSession session,
 									@RequestParam("menu") String menu) throws Exception
 	{
@@ -151,4 +151,29 @@ public class ProductController {
 		
 		return "forward:/product/listProduct.jsp";
 	}
+	
+	@RequestMapping("/listProduct2.do") //수정 listProduct
+	public String listProduct2(@ModelAttribute("search") Search search,Model model,HttpSession session,
+			@RequestParam("menu") String menu) throws Exception
+	{
+			System.out.println("/listProduct2.do");
+
+			if(search.getCurrentPage() ==0 ){
+				search.setCurrentPage(1);
+			}
+			search.setPageSize(pageSize);
+
+			Map<String,Object> map = productService.getProductList(search);
+			Page resultPage	= 
+					new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+
+			model.addAttribute("list", map.get("list"));
+			model.addAttribute("resultPage", resultPage);
+			model.addAttribute("search", search);
+
+			session.setAttribute("menu", menu);
+
+			return "forward:/product/listProduct2.jsp"; //판매상품관리로 forward
+	}
+	
 }

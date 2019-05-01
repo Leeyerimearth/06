@@ -29,7 +29,7 @@
 
 <html>
 <head>
-<title>구매 관리</title>
+<title>구매 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
@@ -53,7 +53,7 @@
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="93%" class="ct_ttl01">구매 관리 </td>
+					<td width="93%" class="ct_ttl01">구매 목록 조회</td>
 				</tr>
 			</table>
 		</td>
@@ -117,16 +117,20 @@
 		<td align="left">${purchase.orderDate}</td>
 		<td></td>
 		<td align="left">현재
+		<c:if test="${purchase.tranCode=='001'}">
+			판매중
+		</c:if>
 		<c:if test="${purchase.tranCode=='002'}">
 			배송중		
+			<a href="/updateTranCode.do?prodNo=${purchase.purchaseProd.prodNo}">물건도착</a>
 		</c:if>
 		<c:if test="${purchase.tranCode=='003'}">
 			배송완료
 		</c:if>
 		<c:if test="${purchase.tranCode=='004'}">
-			구매완료  <a href="/updateTranCode.do?tranNo=${purchase.tranNo}">배송하기</a>
+			구매완료
 		</c:if>
-		</td>
+			상태 입니다.</td>
 		<td></td>
 		<%--
 		<td align="left">

@@ -59,9 +59,15 @@ function history(){
 				</tr>
 				<tr>
 					<td class="Depth03">
-						<a href="/listSale.do?menu=manage"  target="rightFrame">魄概惑前包府</a>
+						<a href="/listProduct2.do?menu=manage"  target="rightFrame">魄概惑前包府</a>
 					</td>
 				</tr>
+				<tr>
+					<td class="Depth03">
+						<a href="/listPurchase.do?menu=manage" target="rightFrame">备 概 包 府</a>
+					</td>
+				</tr>
+				
 				<tr>
 					<td class="DepthEnd">&nbsp;</td>
 				</tr>

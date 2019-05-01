@@ -15,4 +15,6 @@ public interface ProductService {
 
 	public void updateProduct(Product product) throws Exception;
 	
+	public Map<String,Object> getProductList(Search search)throws Exception; // ±×³É productlist
+	
 }

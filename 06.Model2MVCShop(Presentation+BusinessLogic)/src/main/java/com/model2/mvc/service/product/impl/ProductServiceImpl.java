@@ -1,6 +1,7 @@
 package com.model2.mvc.service.product.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,18 @@ public class ProductServiceImpl implements ProductService {
 	public void updateProduct(Product product) throws Exception {
 		// TODO Auto-generated method stub
 		productDao.updateProduct(product);
+	}
+
+	@Override
+	public Map<String, Object> getProductList(Search search) throws Exception { //수정 판매상품관리
+		// TODO Auto-generated method stub
+		List<Product> list =  productDao.getProductList(search);
+		int totalCount = productDao.getTotalCount(search);
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("list", list);
+		map.put("totalCount",totalCount);
+		
+		return map;
 	}
 
 }

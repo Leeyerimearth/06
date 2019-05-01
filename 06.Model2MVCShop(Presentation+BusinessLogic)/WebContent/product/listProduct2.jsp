@@ -42,7 +42,7 @@ function fncGetProductList(currentPage){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listSale.do?menu=manage" method="post">
+<form name="detailForm" action="/listProduct2.do?menu=manage" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -54,7 +54,7 @@ function fncGetProductList(currentPage){
 				<tr>
 					<td width="93%" class="ct_ttl01">
 					
-							상품 관리
+							판매 상품 관리
 					</td>
 				</tr>
 			</table>
@@ -159,24 +159,15 @@ function fncGetProductList(currentPage){
 			<td></td>
 			
 			<c:set var="nowState" value=""/>
-			 <c:if test="${product.proTranCode =='001'}">
+			 <c:if test="${product.quantity >= 1}">
 			 	<c:set var="nowState" value="판매중"/>
 			 	<td align="left">${nowState}
 			 </c:if>
-			 <c:if test="${product.proTranCode =='002'}">
-			 	<c:set var="nowState" value="배송중"/>
+			 <c:if test="${product.quantity <= 0}">
+			 	<c:set var="nowState" value="품절"/>
 			 	<td align="left">${nowState}
 			 </c:if>
-			 <c:if test="${product.proTranCode =='003'}">
-			 	<c:set var="nowState" value="배송완료"/>
-			 	<td align="left">${nowState}
-			 </c:if>
-			 <c:if test="${product.proTranCode =='004'}">
-			 	<c:set var="nowState" value="구매완료"/>
-			 	<td align="left">${nowState}
-			 	<a href="/updateTranCode.do?prodNo=${product.prodNo}">배송하기</a>
-			 </c:if>
-			
+		
 		</tr>
 		<tr>
 			<td colspan="11" bgcolor="D6D7D6" height="1"></td>
