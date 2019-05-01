@@ -127,11 +127,13 @@ public class PurchaseController {
 		{
 			search.setCurrentPage(1);
 		}
-		search.setPageSize(pageSize);
+		search.setPageSize(pageSize); // 하면 start end rownum 만듬
 		
-		if(user.getRole().equals("admin"))// admin이면 null 보내서, transaction table 다가져옴 //근데 admin의 구매정보는 볼수없자낭
-			map = purchaseService.getPurchaseList(search, null);
-		else
+		//String admin = "1";
+		
+		//if(user.getRole().equals("admin"))// admin이면 null 보내서, transaction table 다가져옴 //근데 admin의 구매정보는 볼수없자낭
+			//map = purchaseService.getPurchaseList(search, admin);
+		//else
 			map = purchaseService.getPurchaseList(search, user.getUserId());
 		
 		Page resultPage = 

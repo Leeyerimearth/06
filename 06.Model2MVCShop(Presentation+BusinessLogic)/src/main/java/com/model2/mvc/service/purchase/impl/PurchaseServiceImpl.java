@@ -68,6 +68,17 @@ public class PurchaseServiceImpl  implements PurchaseService{
 			List<Purchase> purchaseList = purchaseDao.getPurchaseList(search, buyerId);
 			int totalCount = purchaseDao.getTotalCount(search, buyerId);
 			
+			for(int i=0; i<purchaseList.size(); i++) //수정
+			{
+				Product product = productDao.findProduct(purchaseList.get(i).getPurchaseProd().getProdNo());
+				//가져온 prodNo를 가지고있는 애를 product table에서 찾고 list에 다시넣어줘야한다.
+				
+				Purchase purchase =purchaseList.get(i);
+				purchase.setPurchaseProd(product); // product table에서 가져온 product정보 purchase domain에 set
+				
+				purchaseList.set(i, purchase);
+			}
+		
 			HashMap<String,Object> map = new HashMap<String,Object>();
 			map.put("totalCount", totalCount);
 			map.put("list", purchaseList);
