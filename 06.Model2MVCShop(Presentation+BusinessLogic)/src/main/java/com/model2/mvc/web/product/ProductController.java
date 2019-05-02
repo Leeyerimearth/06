@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -39,23 +40,27 @@ public class ProductController {
 		System.out.println(this.getClass().getName()+"컨트롤러 생성자");
 	}
 
+	
 	@RequestMapping("/addProduct.do")
-	public String addProduct(@ModelAttribute("product") Product product) throws Exception
+	public ModelAndView addProduct(@ModelAttribute("product") Product product) throws Exception
 	{
 		System.out.println("/addProduct.do");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("forward:/product/addProductResultView.jsp");
 		
 		productService.addProduct(product);
 		
-		return "forward:/product/addProductResultView.jsp";
+		return mv;
 	}
 	
 	@RequestMapping("/getProduct.do")
-	public String getProduct(@RequestParam("prodNo") String prodNo,HttpSession session,HttpServletRequest request,
+	public ModelAndView getProduct(@RequestParam("prodNo") String prodNo,HttpSession session,HttpServletRequest request,
 									HttpServletResponse response) throws Exception
 	{
 		System.out.println("/getProduct.do");
 		
 		Product vo = productService.getProduct(Integer.parseInt(prodNo));
+		ModelAndView mv = new ModelAndView();
 		
 		String cookieString = "";
 		int count=0;
@@ -97,25 +102,29 @@ public class ProductController {
 		System.out.println(menu);
 		
 		if(menu.equals("manage"))
-			return "forward:/updateProductView.do";
+			mv.setViewName("forward:/updateProductView.do");
 		else
-			return "forward:/product/readProduct.jsp";
+			mv.setViewName("forward:/product/readProduct.jsp");
 		
+		return mv;
 	}
 	
 	@RequestMapping("/updateProductView.do")
-	public String updateProductView()
+	public ModelAndView updateProductView()
 	{
 		System.out.println("/updateProductView.do 실행");
+		ModelAndView mv = new ModelAndView();
 		
-		return "forward:/product/updateProductView.jsp";
+		mv.setViewName("forward:/product/updateProductView.jsp");
+		return mv;
 	}
 	
 	@RequestMapping("/updateProduct.do")
-	public String updateProduct(@ModelAttribute("product") Product product, HttpSession session, Model model) throws Exception
+	public ModelAndView updateProduct(@ModelAttribute("product") Product product, HttpSession session) throws Exception
 	{
 		System.out.println("/updateProduct.do 실행 했다리!");
 		
+		ModelAndView mv = new ModelAndView();
 		Product sessionProduct = (Product) session.getAttribute("vo");
 		
 		product.setProdNo(sessionProduct.getProdNo());
@@ -123,16 +132,20 @@ public class ProductController {
 		
 		productService.updateProduct(product);
 		
-		model.addAttribute("vo", product);
+		//model.addAttribute("vo", product);
+		mv.addObject("vo", product);
+		mv.setViewName("forward:/product/readProduct2.jsp");
 		
-		return "forward:/product/readProduct2.jsp";
+		return mv;
 	}
 	
 	@RequestMapping("/listProduct.do") //기존 listProduct trancode때문인것같은데 필요없댜
-	public String listProduct(@ModelAttribute("search") Search search,Model model,HttpSession session,
+	public ModelAndView listProduct(@ModelAttribute("search") Search search,HttpSession session,
 									@RequestParam("menu") String menu) throws Exception
 	{
 		System.out.println("/listProduct.do");
+		
+		ModelAndView mv = new ModelAndView();
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
@@ -143,19 +156,25 @@ public class ProductController {
 		Page resultPage	= 
 				new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("search", search);
+		//model.addAttribute("list", map.get("list"));
+		//model.addAttribute("resultPage", resultPage);
+		//model.addAttribute("search", search);
+		
+		mv.addObject("list", map.get("list"));
+		mv.addObject("resultPage",resultPage);
+		mv.addObject("search",search);
+		mv.setViewName("forward:/product/listProduct.jsp");
 		
 		session.setAttribute("menu", menu);
 		
-		return "forward:/product/listProduct.jsp";
+		return mv;
 	}
 	
 	@RequestMapping("/listProduct2.do") //수정 listProduct
-	public String listProduct2(@ModelAttribute("search") Search search,Model model,HttpSession session,
+	public ModelAndView listProduct2(@ModelAttribute("search") Search search,HttpSession session,
 			@RequestParam("menu") String menu) throws Exception
 	{
+			ModelAndView mv = new ModelAndView();
 			System.out.println("/listProduct2.do");
 
 			if(search.getCurrentPage() ==0 ){
@@ -167,13 +186,18 @@ public class ProductController {
 			Page resultPage	= 
 					new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 
-			model.addAttribute("list", map.get("list"));
-			model.addAttribute("resultPage", resultPage);
-			model.addAttribute("search", search);
+			//model.addAttribute("list", map.get("list"));
+			//model.addAttribute("resultPage", resultPage);
+			//model.addAttribute("search", search);
 
+			mv.addObject("list", map.get("list"));
+			mv.addObject("resultPage",resultPage);
+			mv.addObject("search",search);
+			mv.setViewName("forward:/product/listProduct2.jsp");
+			
 			session.setAttribute("menu", menu);
 
-			return "forward:/product/listProduct2.jsp"; //판매상품관리로 forward
+			return mv; //판매상품관리로 forward
 	}
 	
 }
