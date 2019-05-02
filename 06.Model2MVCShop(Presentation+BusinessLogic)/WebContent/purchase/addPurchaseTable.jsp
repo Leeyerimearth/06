@@ -63,17 +63,17 @@
 	</tr>
 	<tr>
 		<td>구매자주소</td>
-		<td>${param.receiverAddr}</td>
+		<td>${param.divyAddr}</td>
 		<td></td>
 	</tr>
 		<tr>
 		<td>구매요청사항</td>
-		<td>${param.receiverRequest}</td>
+		<td>${param.divyRequest}</td>
 		<td></td>
 	</tr>
 	<tr>
 		<td>배송희망일자</td>
-		<td>${param.receiverDate}</td>
+		<td>${param.divyDate}</td>
 		<td></td>
 	</tr>
 </table>

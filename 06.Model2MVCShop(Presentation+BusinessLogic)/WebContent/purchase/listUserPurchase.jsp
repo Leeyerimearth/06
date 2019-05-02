@@ -116,7 +116,7 @@
 		<td></td>
 		<td align="left">${purchase.orderDate}</td>
 		<td></td>
-		<td align="left">현재
+		<td align="left">
 		<c:if test="${purchase.tranCode=='001'}">
 			판매중
 		</c:if>
@@ -130,7 +130,7 @@
 		<c:if test="${purchase.tranCode=='004'}">
 			구매완료
 		</c:if>
-			상태 입니다.</td>
+		</td>
 		<td></td>
 		<%--
 		<td align="left">
