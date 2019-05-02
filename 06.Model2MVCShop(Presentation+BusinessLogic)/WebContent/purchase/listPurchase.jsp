@@ -124,7 +124,7 @@
 			배송완료
 		</c:if>
 		<c:if test="${purchase.tranCode=='004'}">
-			구매완료  <a href="/updateTranCode.do?tranNo=${purchase.tranNo}">배송하기</a>
+			구매완료  <a href="/updateTranCode.do?tranNo=${purchase.tranNo}&currentPage=${resultPage.currentPage}">배송하기</a>
 		</c:if>
 		</td>
 		<td></td>

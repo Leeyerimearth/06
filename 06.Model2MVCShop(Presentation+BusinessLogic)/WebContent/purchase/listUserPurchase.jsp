@@ -122,7 +122,7 @@
 		</c:if>
 		<c:if test="${purchase.tranCode=='002'}">
 			배송중		
-			<a href="/updateTranCode.do?prodNo=${purchase.purchaseProd.prodNo}">물건도착</a>
+			<a href="/updateTranCode.do?tranNo=${purchase.tranNo}&currentPage=${resultPage.currentPage}">물건도착</a>
 		</c:if>
 		<c:if test="${purchase.tranCode=='003'}">
 			배송완료

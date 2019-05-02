@@ -181,7 +181,7 @@ public class PurchaseController {
 	public String updateTranCode(@RequestParam("tranNo") int tranNo, HttpSession session) throws Exception
 	{
 		System.out.println("/updateTranCode.do");
-		
+		//System.out.println("updateTranCode.do 에서 넘어온 search"+currentPage);
 		//Purchase purchase = purchaseService.getPurchase2(prodNo);
 		Purchase purchase = purchaseService.getPurchase(tranNo); //tranNo로 수정
 		purchaseService.updateTranCode(purchase);
